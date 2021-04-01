@@ -1,6 +1,6 @@
 from block import Block
+from document import Document
 import json
-
 class Blockchain:
 
     def __init__(self):
@@ -10,12 +10,7 @@ class Blockchain:
         self.genesis = self.create_genesis()
 
     def create_genesis(self):
-        docs = {
-            'doc1': 'aaa',
-            'doc2': 'bbb',
-            'doc3': 'ccc'
-        }
-        genesis = Block(docs, '0000', 0, 5)
+        genesis = Block(self.pool, '0000', 0, 5)
         self.opened_block = genesis
         return genesis
 
@@ -35,3 +30,14 @@ class Blockchain:
                 break
             else:
                 block['nonce']+=1
+    
+    def new_document(self, doc):
+        if doc is None:
+            raise ValueError
+        document = Document(doc)
+        if document.check_signature():
+            document.create_id(self.__dict__)
+            self.pool.append(document.__dict__)
+            return True
+        else:
+            return False

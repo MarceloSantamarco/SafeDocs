@@ -1,7 +1,5 @@
 from datetime import datetime
-import hashlib
-import application_helper as helper
-
+from Crypto.Hash import SHA256
 class Block:
     
     def __init__(self, data, previous_hash, previous_id, difficulty):
@@ -13,6 +11,6 @@ class Block:
         self.hash = self.create_hash()
 
     def create_hash(self):
-        sha = hashlib.sha256()
-        sha.update(helper.serialize(self).encode('utf-8'))
-        return sha.hexdigest()
+        h = SHA256.new()
+        h = SHA256.new(bytes(str(self.__dict__), 'utf-8'))
+        return h.hexdigest()

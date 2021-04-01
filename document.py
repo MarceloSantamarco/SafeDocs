@@ -1,18 +1,37 @@
-import application_helper as helper
-from Crypto import Random
+from Crypto.Signature import pkcs1_15
 from Crypto.PublicKey import RSA
-import base64
+from Crypto.Hash import SHA256
+class Document:
 
-class Document: 
-
-    def __init__(self):
+    def __init__(self, doc):
         self.id = None
-        self.doc_bins = ''
+        self.doc = doc
         self.signature = self.generate_signature()
 
     def generate_signature(self):
-        data = helper.serialize(self)
-        modulus_length = 256*4
-        privatekey = RSA.generate(modulus_length, data)
-        publickey = privatekey.publickey()
-        return privatekey, publickey
+        key = RSA.import_key(open('private_key.pem', 'rb').read(), passphrase=open('password.txt', 'rb').read())
+        h = SHA256.new(bytes(self.doc, 'utf-8'))
+        return pkcs1_15.new(key).sign(h)
+
+    def check_signature(self):
+        key = RSA.import_key(open('private_key.pem', 'rb').read(), passphrase=open('password.txt', 'rb').read())
+        h = SHA256.new(bytes(self.doc, 'utf-8'))
+        try:
+            pkcs1_15.new(key).verify(h, self.signature)
+            print("Signature verifyed!")
+            return True
+        except (ValueError, TypeError):
+            print("Invalid signature!")
+            return False
+
+    def create_id(self, blockchain):
+        docs_previous_block = [] if blockchain['chain'] == [] else blockchain['chain'][-1]['data']
+        docs_current_pool = blockchain['pool']
+        if docs_current_pool == []: 
+            if docs_previous_block == []:
+                self.id = 1
+            else:
+                self.id = docs_previous_block[-1]['id']+1
+        else:
+           self.id = docs_current_pool[-1]['id']+1
+        return True
