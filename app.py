@@ -5,11 +5,10 @@ ad = Address()
 print(ad.__dict__)
 
 bc = Blockchain()
+print(bc.__dict__)
 
-bc.new_document('doc1')
-bc.new_document('doc2')
-bc.new_document('doc3')
-bc.new_document('doc4')
+bc.new_document('./test.txt')
+bc.new_document('./test2.txt')
 
 bc.mine_block()
 
