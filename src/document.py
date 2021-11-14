@@ -6,7 +6,7 @@ class Document:
 
     def __init__(self, doc):
         self.id = None
-        self.doc = open(doc, 'rb').read()
+        self.doc = doc.read()
         self.signature = self.generate_signature()
 
     def generate_signature(self):

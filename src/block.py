@@ -1,8 +1,8 @@
 from datetime import datetime
 from Crypto.Hash import SHA256
 class Block:
-    
-    def __init__(self, data, previous_hash, previous_id, difficulty):
+
+    def __init__(self, data, previous_id, difficulty):
         self.id = previous_id+1
         self.difficulty = difficulty
         self.nonce = 1

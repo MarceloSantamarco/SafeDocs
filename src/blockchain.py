@@ -1,6 +1,6 @@
-from block import Block
-from document import Document
-import json
+from .block import Block
+from .document import Document
+
 class Blockchain:
 
     def __init__(self):
@@ -10,18 +10,18 @@ class Blockchain:
         self.genesis = None
 
     def create_genesis(self):
-        genesis = Block(self.pool, '0', 0, 5)
+        genesis = Block(self.pool, 0, 5)
         self.opened_block = genesis
         self.genesis = genesis
         return genesis
 
     def new_block(self):
-        self.opened_block = Block(self.pool, self.chain[-1]['hash'], self.chain[-1]['id'], self.chain[-1]['difficulty']+1)
+        self.opened_block = Block(self.pool, self.chain[-1]['id'], self.chain[-1]['difficulty']+1)
 
     def mine_block(self):
         if self.opened_block is None:
-            raise Exception("Block is not available")
-        block = self.opened_block.__dict__
+            raise ConnectionError("Block is not available")
+        block = self.opened_block if self.opened_block.__class__ == dict else self.opened_block.__dict__
         difficulty = block['difficulty']
         while 1:
             hasher = self.opened_block.create_hash()
@@ -31,6 +31,7 @@ class Blockchain:
                 self.chain.append(block)
                 print(f"Bloco #{block['id']}, com dificuldade #{block['difficulty']} foi minerado com nonce #{block['nonce']} e hash #{block['hash']}")
                 self.opened_block = None
+                self.pool = []
                 break
             else:
                 block['nonce']+=1
