@@ -14,4 +14,3 @@ def serialize(obj):
             except:
                 pass
     return json.dumps(obj)
-    

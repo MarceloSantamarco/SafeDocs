@@ -10,7 +10,7 @@ class Blockchain:
         self.genesis = None
 
     def create_genesis(self):
-        genesis = Block(self.pool, 0, 5)
+        genesis = Block(self.pool, 0, 1)
         self.opened_block = genesis
         self.genesis = genesis
         return genesis
@@ -21,7 +21,10 @@ class Blockchain:
     def mine_block(self):
         if self.opened_block is None:
             raise ConnectionError("Block is not available")
-        block = self.opened_block if self.opened_block.__class__ == dict else self.opened_block.__dict__
+        if self.opened_block.__class__ == dict:
+            block = self.opened_block
+        else:
+            block = self.opened_block.__dict__
         difficulty = block['difficulty']
         while 1:
             hasher = self.opened_block.create_hash()
