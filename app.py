@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 import json
 
 from src.blockchain import Blockchain
@@ -50,6 +50,10 @@ def mine():
 @app.route("/document/new", methods=["POST"])
 def new_document():
     try:
+        adresses[request.form.get("address")]
+    except KeyError:
+        return {"error": "Address not found"}
+    try:
         if bc.new_document(request.files["document"]):
             adresses[request.form.get("address")].append(bc.pool[-1])
             return serialize(bc.pool[-1])
@@ -62,10 +66,15 @@ def new_document():
 def verify_document():
     doc = request.files["document"]
     for i in bc.chain:
-        print(i)
         for j in i['data']:
-            print(j['doc'])
-            print(doc.read())
-            if j['doc'] == doc.read():
-                return {'status': 200}
+            if j['doc'] == str(doc.read(), 'utf-8', 'replace'):
+                return serialize(j)
     return {'status': 404}
+
+@app.route("/document/digital_certificate", methods=["GET"])
+def issue_certificate():
+    # doc_id = request.params.get("document")
+    # address = request.form.get("address")
+    # for i in adresses[address]:
+    #     if i['id'] == doc_id:
+    return render_template('certificate.html')
