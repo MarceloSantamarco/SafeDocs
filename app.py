@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+from flask_cors import CORS, cross_origin
 import json
 
 from src.blockchain import Blockchain
@@ -6,6 +7,8 @@ from src.address import Address
 from src.application_helper import serialize
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 bc = Blockchain()
 adresses = {}
@@ -15,6 +18,7 @@ def home():
     return serialize(bc)
 
 @app.route("/address/new", methods=["GET"])
+@cross_origin()
 def new_address():
     ad = Address()
 
@@ -23,6 +27,7 @@ def new_address():
     return serialize(ad)
     
 @app.route("/address/find", methods=["GET"])
+@cross_origin()
 def find_user_documents():
     try:
         docs = adresses[request.form.get("address")]
@@ -31,6 +36,7 @@ def find_user_documents():
     return json.dumps(docs) if len(docs) > 0 else {}
 
 @app.route("/block/available", methods=["GET"])
+@cross_origin()
 def available():
     dic = bc.__dict__
     if dic["opened_block"] == None:
@@ -39,6 +45,7 @@ def available():
         return serialize(dic["opened_block"])
 
 @app.route("/blockchain/mine", methods=["GET"])
+@cross_origin()
 def mine():
     try:
         bc.mine_block()
@@ -48,6 +55,7 @@ def mine():
         return serialize(bc.chain[-1])
 
 @app.route("/document/new", methods=["POST"])
+@cross_origin()
 def new_document():
     try:
         adresses[request.form.get("address")]
@@ -63,6 +71,7 @@ def new_document():
         return {"error": "The document is not available"}
 
 @app.route("/document/verify", methods=["GET"])
+@cross_origin()
 def verify_document():
     doc = request.files["document"]
     for i in bc.chain:
@@ -72,6 +81,7 @@ def verify_document():
     return {'status': 404}
 
 @app.route("/document/digital_certificate", methods=["GET"])
+@cross_origin()
 def issue_certificate():
     # doc_id = request.params.get("document")
     # address = request.form.get("address")
