@@ -4,6 +4,7 @@ import json
 
 from src.blockchain import Blockchain
 from src.address import Address
+from src.user import User
 from src.application_helper import serialize
 
 app = Flask(__name__)
@@ -19,15 +20,21 @@ def home():
 
 @app.route("/address/new", methods=["GET"])
 @cross_origin()
+
 def new_address():
-    ad = Address()
+    user = User(request.form.get("name"), request.form.get("email"), request.form.get("password"))
 
-    adresses[ad.__dict__["address"]] = []
+    adresses[user.__dict__["address"]] = []
 
-    return serialize(ad)
+    return {
+        'id': user.__dict__['id'], 
+        'email': user.__dict__['email'], 
+        'address': user.__dict__['address']
+    }
     
 @app.route("/address/find", methods=["GET"])
 @cross_origin()
+
 def find_user_documents():
     try:
         docs = adresses[request.form.get("address")]
@@ -37,6 +44,7 @@ def find_user_documents():
 
 @app.route("/block/available", methods=["GET"])
 @cross_origin()
+
 def available():
     dic = bc.__dict__
     if dic["opened_block"] == None:
@@ -46,6 +54,7 @@ def available():
 
 @app.route("/blockchain/mine", methods=["GET"])
 @cross_origin()
+
 def mine():
     try:
         bc.mine_block()
@@ -56,6 +65,7 @@ def mine():
 
 @app.route("/document/new", methods=["POST"])
 @cross_origin()
+
 def new_document():
     try:
         adresses[request.form.get("address")]
@@ -72,6 +82,7 @@ def new_document():
 
 @app.route("/document/verify", methods=["GET"])
 @cross_origin()
+
 def verify_document():
     doc = request.files["document"]
     for i in bc.chain:
@@ -82,6 +93,7 @@ def verify_document():
 
 @app.route("/document/digital_certificate", methods=["GET"])
 @cross_origin()
+
 def issue_certificate():
     # doc_id = request.params.get("document")
     # address = request.form.get("address")
