@@ -18,7 +18,7 @@ adresses = {}
 def home():
     return serialize(bc)
 
-@app.route("/address/new", methods=["GET"])
+@app.route("/address/new", methods=["POST"])
 @cross_origin()
 
 def new_address():
