@@ -1,14 +1,17 @@
 import base64
-from Crypto.PublicKey import RSA
 from src.address import Address
-import sqlite3
-
+from src.application_helper import create_connection
 class User:
 
     def __init__(self, name, email, password):
 
+        conn = create_connection()
+        user = self.find_user(email, conn)
+
+        if user is not None:
+            raise ValueError
+
         address = Address()
-        conn = self.create_connection()
         last_id = self.get_max_id(conn)
 
         self.id = 1 if not last_id else last_id+1
@@ -36,6 +39,8 @@ class User:
         cursor = c.execute('SELECT MAX(USER_ID) FROM USERS')
         return cursor.fetchone()[0]
 
-    def create_connection(self):
-        return sqlite3.connect('test_database') 
-
+    def find_user(self, email, conn):
+        c = conn.cursor()
+        sql = f""" SELECT * FROM USERS WHERE EMAIL = '{email}' """
+        cursor = c.execute(sql)
+        return cursor.fetchone()

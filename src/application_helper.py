@@ -1,4 +1,5 @@
 import json
+import sqlite3
 
 def serialize(obj):
     try:
@@ -14,3 +15,6 @@ def serialize(obj):
             except:
                 pass
     return json.dumps(obj)
+
+def create_connection():
+    return sqlite3.connect('test_database') 

@@ -3,8 +3,8 @@ from flask_cors import CORS, cross_origin
 import json
 
 from src.blockchain import Blockchain
-from src.address import Address
 from src.user import User
+from src.session import Session
 from src.application_helper import serialize
 
 app = Flask(__name__)
@@ -22,15 +22,34 @@ def home():
 @cross_origin()
 
 def new_address():
-    user = User(request.form.get("name"), request.form.get("email"), request.form.get("password"))
 
-    adresses[user.__dict__["address"]] = []
+    try:
+        user = User(request.form.get("name"), request.form.get("email"), request.form.get("password"))
 
-    return {
-        'id': user.__dict__['id'], 
-        'email': user.__dict__['email'], 
-        'address': user.__dict__['address']
-    }
+        adresses[user.__dict__["address"]] = []
+
+        return {
+            user: user.__dict__
+        }
+    except ValueError:
+        return {
+            'error': 'email already exists'
+        }
+
+@app.route("/session/new", methods=["GET"])
+@cross_origin()
+
+def new_session():
+
+    try:
+        session  = Session(request.form.get("email"), request.form.get("password"))
+        return {
+            'session': session.__dict__
+        }
+    except ValueError:
+        return {
+            'error': 'invalid email or password' 
+        }
     
 @app.route("/address/find", methods=["GET"])
 @cross_origin()
