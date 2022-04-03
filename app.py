@@ -37,7 +37,7 @@ def new_address():
 
 def find_user_documents():
     try:
-        docs = adresses[request.form.get("address")]
+        docs = adresses[request.args.get("address")]
     except KeyError:
         docs = {'error': 'Address is not found'}
     return json.dumps(docs) if len(docs) > 0 else {}
@@ -68,12 +68,12 @@ def mine():
 
 def new_document():
     try:
-        adresses[request.form.get("address")]
+        adresses[request.args.get("address")]
     except KeyError:
         return {"error": "Address not found"}
     try:
         if bc.new_document(request.files["document"]):
-            adresses[request.form.get("address")].append(bc.pool[-1])
+            adresses[request.args.get("address")].append(bc.pool[-1])
             return serialize(bc.pool[-1])
         else:
             return {"error": "Invalid Signature"}
