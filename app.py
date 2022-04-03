@@ -43,6 +43,7 @@ def new_session():
 
     try:
         session  = Session(request.form.get("email"), request.form.get("password"))
+        adresses[session.__dict__["address"]] = []
         return {
             'session': session.__dict__
         }
@@ -114,8 +115,15 @@ def verify_document():
 @cross_origin()
 
 def issue_certificate():
-    # doc_id = request.params.get("document")
-    # address = request.form.get("address")
-    # for i in adresses[address]:
-    #     if i['id'] == doc_id:
-    return render_template('certificate.html')
+    doc = request.files["document"]
+    address = request.args.get("address")
+    for i in bc.chain:
+        for j in i['data']:
+            if j['doc'] == str(doc.read(), 'utf-8', 'replace'):
+                i=50
+                x=j['signature']
+                while i <= len(j['signature']):
+                    x = f"{x[:i]}\n{x[i:]}"
+                    i+=50
+                return render_template('certificate.html', doc=j, address=address, signature=x)
+    return {'status': 404}

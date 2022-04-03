@@ -30,10 +30,11 @@
             }
             .assignment {
                 margin: 20px;
+                vertical-align: middle;
             }
             .person {
                 border-bottom: 2px solid black;
-                font-size: 32px;
+                font-size: 25px;
                 font-style: italic;
                 margin: 20px auto;
                 width: 400px;
@@ -41,29 +42,31 @@
             .reason {
                 margin: 20px;
             }
+            .signature{
+                font-size: small;
+                vertical-align: middle;
+            }
         </style>
     </head>
     <body>
         <div class="container">
-            <div class="logo">
-                An Organization
-            </div>
-
             <div class="marquee">
-                Certificate of Completion
+                Certificado de Autenticidade
             </div>
 
             <div class="assignment">
-                This certificate is presented to
+                Documento autêntico, assinado pelo endereço público: 
+                    <p class="signature">{{ address }}</p>
             </div>
 
             <div class="person">
-                Joe Nathan
+                Assinatura:
+                <p class="signature">{{ signature }}</p>
             </div>
 
-            <div class="reason">
-                For deftly defying the laws of gravity<br/>
-                and flying high
+            <div class="person">
+                Carimbo de tempo:
+                <pre class="signature">{{ doc.timestamp }}</pre>
             </div>
         </div>
     </body>

@@ -2,23 +2,25 @@ from Crypto.Signature import pkcs1_15
 from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
 import base64
+from datetime import datetime
 class Document:
 
     def __init__(self, doc):
         self.id = None
         self.doc = doc.read()
         self.signature = self.generate_signature()
+        self.timestamp = str(datetime.now(tz=None))
 
     def generate_signature(self):
         key = RSA.import_key(open('private_key.pem', 'rb').read(), passphrase=open('password.txt', 'rb').read())
         h = SHA256.new(base64.b64encode(self.doc))
-        return pkcs1_15.new(key).sign(h)
+        return base64.b64encode(pkcs1_15.new(key).sign(h))
 
     def check_signature(self):
         key = RSA.import_key(open('private_key.pem', 'rb').read(), passphrase=open('password.txt', 'rb').read())
         h = SHA256.new(base64.b64encode(self.doc))
         try:
-            pkcs1_15.new(key).verify(h, self.signature)
+            pkcs1_15.new(key).verify(h, base64.b64decode(self.signature))
             print("Signature verifyed!")
             return True
         except (ValueError, TypeError):
