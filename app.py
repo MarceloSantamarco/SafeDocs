@@ -36,7 +36,7 @@ def new_address():
             'error': 'email already exists'
         }
 
-@app.route("/session/new", methods=["GET"])
+@app.route("/session/new", methods=["POST"])
 @cross_origin()
 
 def new_session():
