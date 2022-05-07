@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS, cross_origin
 import json
 
@@ -29,12 +29,16 @@ def new_address():
         adresses[user.__dict__["address"]] = []
 
         return {
-            user: user.__dict__
-        }
+            'session': {
+                'name': user.name,
+                'email': user.email,
+                'address': user.address
+            }
+        }, 200
     except ValueError:
         return {
-            'error': 'email already exists'
-        }
+            'error': 'E-mail já cadastrado!'
+        }, 400
 
 @app.route("/session/new", methods=["POST"])
 @cross_origin()
@@ -49,8 +53,8 @@ def new_session():
         }
     except ValueError:
         return {
-            'error': 'invalid email or password' 
-        }
+            'error': 'E-mail ou senha incorretos!' 
+        }, 404
     
 @app.route("/address/find", methods=["GET"])
 @cross_origin()
