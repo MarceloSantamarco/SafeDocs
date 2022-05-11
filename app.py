@@ -94,15 +94,15 @@ def new_document():
     try:
         adresses[request.args.get("address")]
     except KeyError:
-        return {"error": "Address not found"}
+        return {"error": "Address not found"}, 400
     try:
         if bc.new_document(request.files["document"]):
             adresses[request.args.get("address")].append(bc.pool[-1])
             return serialize(bc.pool[-1])
         else:
-            return {"error": "Invalid Signature"}
+            return {"error": "Invalid Signature"}, 400
     except ValueError:
-        return {"error": "The document is not available"}
+        return {"error": "The document is not available"}, 400
 
 @app.route("/document/verify", methods=["GET"])
 @cross_origin()
