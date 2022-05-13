@@ -91,13 +91,14 @@ def mine():
 @cross_origin()
 
 def new_document():
+    print(request.__dict__)
     try:
-        adresses[request.args.get("address")]
+        adresses[request.form.get("address")]
     except KeyError:
         return {"error": "Address not found"}, 400
     try:
         if bc.new_document(request.files["document"]):
-            adresses[request.args.get("address")].append(bc.pool[-1])
+            adresses[request.form.get("address")].append(bc.pool[-1])
             return serialize(bc.pool[-1])
         else:
             return {"error": "Invalid Signature"}, 400
