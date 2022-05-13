@@ -47,7 +47,12 @@ def new_session():
 
     try:
         session  = Session(request.form.get("email"), request.form.get("password"))
-        adresses[session.__dict__["address"]] = []
+        try:
+            adresses[session.__dict__["address"]]
+        except KeyError:
+            adresses[session.__dict__["address"]] = []
+        else:
+            pass
         return {
             'session': session.__dict__
         }
@@ -91,7 +96,6 @@ def mine():
 @cross_origin()
 
 def new_document():
-    print(request.__dict__)
     try:
         adresses[request.form.get("address")]
     except KeyError:
