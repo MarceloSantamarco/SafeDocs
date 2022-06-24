@@ -114,9 +114,10 @@ def new_document():
 
 def verify_document():
     doc = request.files["document"]
+    reading = str(doc.read(), 'utf-8', 'replace')
     for i in bc.chain:
         for j in i['data']:
-            if j['doc'] == str(doc.read(), 'utf-8', 'replace'):
+            if j['doc'] == reading:
                 return serialize(j)
     return {
         'status': 400,
@@ -128,10 +129,11 @@ def verify_document():
 
 def issue_certificate():
     doc = request.files["document"]
+    reading = str(doc.read(), 'utf-8', 'replace')
     address = request.form.get("address")
     for i in bc.chain:
         for j in i['data']:
-            if j['doc'] == str(doc.read(), 'utf-8', 'replace'):
+            if j['doc'] == reading:
                 i=50
                 x=j['signature']
                 while i <= len(j['signature']):
