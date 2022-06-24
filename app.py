@@ -88,7 +88,7 @@ def mine():
     try:
         bc.mine_block()
     except ConnectionError:
-        return {"error": "Block is not available"}
+        return {"error": "Block is not available"}, 400
     else:
         return serialize(bc.chain[-1])
 
@@ -109,7 +109,7 @@ def new_document():
     except ValueError:
         return {"error": "The document is not available"}, 400
 
-@app.route("/document/verify", methods=["GET"])
+@app.route("/document/verify", methods=["POST"])
 @cross_origin()
 
 def verify_document():
@@ -118,14 +118,17 @@ def verify_document():
         for j in i['data']:
             if j['doc'] == str(doc.read(), 'utf-8', 'replace'):
                 return serialize(j)
-    return {'status': 404}
+    return {
+        'status': 400,
+        'message': 'Invalid document!'
+    }, 400
 
-@app.route("/document/digital_certificate", methods=["GET"])
+@app.route("/document/digital_certificate", methods=["POST"])
 @cross_origin()
 
 def issue_certificate():
     doc = request.files["document"]
-    address = request.args.get("address")
+    address = request.form.get("address")
     for i in bc.chain:
         for j in i['data']:
             if j['doc'] == str(doc.read(), 'utf-8', 'replace'):
@@ -135,4 +138,7 @@ def issue_certificate():
                     x = f"{x[:i]}\n{x[i:]}"
                     i+=50
                 return render_template('certificate.html', doc=j, address=address, signature=x)
-    return {'status': 404}
+    return {
+        'status': 400,
+        'message': 'Invalid document!'
+    }, 400
