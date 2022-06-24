@@ -1,73 +1,78 @@
 <html>
-    <head>
-        <style type='text/css'>
-            body, html {
-                margin: 0;
-                padding: 0;
-            }
-            body {
-                color: black;
-                display: table;
-                font-family: Georgia, serif;
-                font-size: 24px;
-                text-align: center;
-            }
-            .container {
-                border: 20px solid tan;
-                width: 750px;
-                height: 563px;
-                display: table-cell;
-                vertical-align: middle;
-            }
-            .logo {
-                color: tan;
-            }
+  <head>
+    <style type="text/css">
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 750px;
+        height: 450px;
+      }
+      body {
+        color: black;
+        background-color: #fff;
+        display: table;
+        font-family: Georgia, serif;
+        font-size: 16px;
+        text-align: center;
+        width: 750px;
+        height: 450px;
+      }
+      .container {
+        border: 20px solid tan;
+        width: 750px;
+        height: 450px;
+        display: table-cell;
+        vertical-align: middle;
+      }
+      .logo {
+        color: tan;
+      }
 
-            .marquee {
-                color: tan;
-                font-size: 48px;
-                margin: 20px;
-            }
-            .assignment {
-                margin: 20px;
-                vertical-align: middle;
-            }
-            .person {
-                border-bottom: 2px solid black;
-                font-size: 25px;
-                font-style: italic;
-                margin: 20px auto;
-                width: 400px;
-            }
-            .reason {
-                margin: 20px;
-            }
-            .signature{
-                font-size: small;
-                vertical-align: middle;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="marquee">
-                Certificado de Autenticidade
-            </div>
+      .marquee {
+        color: tan;
+        font-size: 24px;
+        margin: 10px;
+      }
+      .assignment {
+        margin: 20px;
+        vertical-align: middle;
+      }
+      .person {
+        border-bottom: 2px solid black;
+        font-size: 18px;
+        font-style: italic;
+        margin: 10px auto;
+        width: 400px;
+      }
+      .reason {
+        margin: 20px;
+      }
+      .signature {
+        background-color: #fff;
+        font-size: small;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="marquee">Certificado de Autenticidade</div>
 
-            <div class="assignment">
-                Documento autêntico, assinado pelo endereço público: 
-                    <p class="signature">{{ address }}</p>
-            </div>
+      <div class="assignment">
+        Documento autêntico, assinado pelo endereço público:
+        <p class="signature">{{ address }}</p>
+      </div>
 
-            <div class="person">
-                Assinatura:
-                <p class="signature">{{ signature }}</p>
-            </div>
+      <div class="person">
+        Assinatura:
+        <p class="signature">{{ signature }}</p>
+      </div>
 
-            <div class="person">
-                Carimbo de tempo:
-                <pre class="signature">{{ doc.timestamp }}</pre>
-            </div>
-        </div>
-    </body>
+      <div class="person">
+        Carimbo de tempo:
+        <pre class="signature">{{ doc.timestamp }}</pre>
+      </div>
+    </div>
+  </body>
 </html>
