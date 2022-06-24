@@ -39,11 +39,11 @@ class Blockchain:
             else:
                 block['nonce']+=1
     
-    def new_document(self, doc):
+    def new_document(self, doc, address):
         if doc is None:
             raise ValueError
-        document = Document(doc)
-        if document.check_signature():
+        document = Document(doc, address)
+        if document.check_signature(address):
             document.create_id(self.__dict__)
             self.pool.append(document.__dict__)
             if len(self.pool) > 1:

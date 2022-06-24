@@ -101,7 +101,7 @@ def new_document():
     except KeyError:
         return {"error": "Address not found"}, 400
     try:
-        if bc.new_document(request.files["document"]):
+        if bc.new_document(request.files["document"], request.form.get("address")):
             adresses[request.form.get("address")].append(bc.pool[-1])
             return serialize(bc.pool[-1])
         else:
