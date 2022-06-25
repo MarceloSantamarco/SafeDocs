@@ -10,13 +10,13 @@ class Blockchain:
         self.genesis = None
 
     def create_genesis(self):
-        genesis = Block(self.pool, 0, 1)
+        genesis = Block(self.pool, 0, 1, 0)
         self.opened_block = genesis
         self.genesis = genesis
         return genesis
 
     def new_block(self):
-        self.opened_block = Block(self.pool, self.chain[-1]['id'], self.chain[-1]['difficulty']+1)
+        self.opened_block = Block(self.pool, self.chain[-1]['id'], self.chain[-1]['difficulty']+1, self.chain[-1]['hash'])
 
     def mine_block(self):
         if self.opened_block is None:
