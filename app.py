@@ -130,8 +130,7 @@ def verify_document():
 @cross_origin()
 
 def issue_certificate():
-    doc = request.files["document"]
-    reading = str(doc.read(), 'utf-8', 'replace')
+    reading = request.form.get("doc")
     address = request.form.get("address")
     for i in bc.chain:
         for j in i['data']:
