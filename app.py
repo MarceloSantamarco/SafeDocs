@@ -103,7 +103,9 @@ def new_document():
     try:
         if bc.new_document(request.files["document"], request.form.get("address")):
             adresses[request.form.get("address")].append(bc.pool[-1])
-            return serialize(bc.pool[-1])
+            serialize(bc.pool[-1])
+            mine()
+            return adresses[request.form.get("address")][-1]
         else:
             return {"error": "Invalid Signature"}, 400
     except ValueError:
