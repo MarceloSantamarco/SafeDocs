@@ -69,13 +69,13 @@ def find_user_documents():
         docs = adresses[request.args.get("address")]
     except KeyError:
         docs = {'error': 'Address is not found'}, 400
-    return json.dumps(docs) if len(docs) > 0 else {}
+    return json.dumps(docs) if len(docs) > 0 else []
 
-@app.route("/block/find", methods=["GET"])
+@app.route("/block/find", methods=["POST"])
 @cross_origin()
 def find_document_block():
     try:
-        signature = request.args.get("signature")
+        signature = request.form.get("signature")
     except:
         return {'error': 'Signature is not found'}, 400
 
