@@ -8,6 +8,8 @@ class Document:
     def __init__(self, doc, address):
         self.id = None
         self.doc = doc.read()
+        self.doc_name = doc.filename
+        self.doc_extension = doc.filename.split('.')[1]
         self.signature = self.generate_signature(address)
         self.timestamp = str(datetime.now(tz=None))
 

@@ -10,7 +10,7 @@ class Blockchain:
         self.genesis = None
 
     def create_genesis(self):
-        genesis = Block(self.pool, 0, 1, 0)
+        genesis = Block(self.pool, 0, 2, 0)
         self.opened_block = genesis
         self.genesis = genesis
         return genesis

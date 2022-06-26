@@ -1,5 +1,6 @@
 import json
 import sqlite3
+import fitz
 
 def serialize(obj):
     try:
@@ -18,3 +19,10 @@ def serialize(obj):
 
 def create_connection():
     return sqlite3.connect('test_database') 
+
+def read_fitz(certificate):
+    with fitz.open(stream=certificate.read(), filetype="pdf") as doc:
+        text = []
+        for page in doc:
+            text.append(page.get_text().split(':'))
+        return text[0][2].replace('\n', '').replace(' ', '').replace('Carimbodetempo', '')

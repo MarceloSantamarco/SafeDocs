@@ -5,7 +5,7 @@ import json
 from src.blockchain import Blockchain
 from src.user import User
 from src.session import Session
-from src.application_helper import serialize
+from src.application_helper import serialize, read_fitz
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -114,10 +114,12 @@ def new_document():
 
 def verify_document():
     doc = request.files["document"]
+    certificate = request.files["certificate"]
     reading = str(doc.read(), 'utf-8', 'replace')
+    signature = read_fitz(certificate)
     for i in bc.chain:
         for j in i['data']:
-            if j['doc'] == reading:
+            if j['doc'] == reading and j['signature'] == signature:
                 return serialize(j)
     return {
         'status': 400,
